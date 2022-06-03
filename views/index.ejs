@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MY APP</title>
+</head>
+<body>
+<h1> Hello Welcome to <strong>Quote World</strong></h1>
+<hr>
+<form method="post" action="/quotes" >
+<h2>Let's hear you best quote</h2>
+<input type="text" name="name" placeholder="Name">
+<input type="text" name="quote" placeholder="Enter quote text...">
+<button type="submit">POST</button>
+</form>
+<div>
+    <h2>Saved Quotes:</h2>
+    <ul>
+    <% for(var i = 0; i < quotes.length; i++) {%>
+    <li class="quote-item">
+        <span class="quote-name"><%= quotes[i].name %>: </span>
+        <span class="quote-text"><%= quotes[i].quote %></span>
+    </li>
+    <% } %>
+    </ul>
+</div>
+</body>
+</html>
