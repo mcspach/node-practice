@@ -1,10 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const { response } = require("express");
+const { ObjectId } = require("mongodb");
 const app = express();
 const MongoClient = require("mongodb").MongoClient;
 
 //templating engine
 app.set("view engine", "ejs");
+app.use(express.static("public"));
+app.use(bodyParser.json());
 
 //data
 MongoClient.connect(
@@ -25,15 +29,42 @@ MongoClient.connect(
           res.render("index.ejs", { quotes: results });
         })
         .catch((error) => console.error(error));
-
-      //   res.sendFile(__dirname + "/index.html");
     });
 
     app.post("/quotes", (req, res) => {
       quotesCollection
         .insertOne(req.body)
         .then((result) => {
+          res.redirect("/");
           console.log(req.body, result);
+        })
+        .catch((error) => console.error(error));
+    });
+
+    app.put("/quotes", (req, res) => {
+      console.log(req.body);
+      quotesCollection
+        .findOneAndUpdate(
+          { _id: ObjectId(req.body._id) },
+          {
+            $set: {
+              name: req.body.name,
+              quote: req.body.quote,
+            },
+          },
+          { upsert: false }
+        )
+        .then((result) => {
+          res.json("Good job, you updated a quote.");
+        })
+        .catch((error) => console.error(error));
+    });
+
+    app.delete("/quotes", (req, res) => {
+      quotesCollection
+        .deleteOne({ _id: ObjectId(req.body._id) })
+        .then((result) => {
+          res.json("Good Job. Deleted One");
         })
         .catch((error) => console.error(error));
     });

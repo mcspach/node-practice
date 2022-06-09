@@ -2,27 +2,91 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MY APP</title>
+<title>TO DON'T LIST</title>
+<link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+<script src="https://kit.fontawesome.com/6a2421899f.js" crossorigin="anonymous"></script>
+<style>
+body {
+    background-image: url(https://imgs.search.brave.com/z6X6uXCVDiJ3Vh9zzrk8AOQAO79kbng3u3ejigOrDsc/rs:fit:1080:783:1/g:ce/aHR0cHM6Ly93d3cu/Z2V0YXdheS5jby56/YS93cC1jb250ZW50/L3VwbG9hZHMvMjAy/MC8xMS9zdWVkYWZy/aWthX2VybGViZW5f/OTM1MjA1NzJfMTQx/MzcyMDIwNzYxMjcx/XzY2MTU4Njg4MDc0/OTAzNjI0MTZfbi1l/MTYwNDY0ODg0MjQ3/MS5qcGc);
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    }
+
+h1, h2, h3, h4 {
+    text-shadow: 0 0 14px #FFFFFF;
+}
+li.quote-item {
+    display: flex;
+    justify-content:space-between;
+}
+li.quote-item, .popup {
+    display: flex;
+    justify-content:space-between;
+    background-color: rgba(255, 255, 255, .8);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom:10px;
+}
+form.popup {
+    display: none;
+}
+p.quote-name {
+    font-weight: bold;
+}
+</style>
 </head>
 <body>
-<h1> Hello Welcome to <strong>Quote World</strong></h1>
-<hr>
+<h1>What <strong>NOT</strong> to DO.</h1>
 <form method="post" action="/quotes" >
-<h2>Let's hear you best quote</h2>
+<h2>The ultimate TO DON'T LIST</h2>
 <input type="text" name="name" placeholder="Name">
 <input type="text" name="quote" placeholder="Enter quote text...">
 <button type="submit">POST</button>
 </form>
-<div>
-    <h2>Saved Quotes:</h2>
+<div style="padding-bottom: 100px;">
+    <h2 style="text-align:center;">Saved Quotes:</h2>
+   
     <ul>
+        <li class="quote-item">
+        <div style="width: 70%;">
+           <p>Example Quote: </p>
+            <p class="quote-name">Jordan B Peterson: </p>
+            <p class="quote-text">"Don't bother children while they're skateboarding."</p>
+        </div>
+        <div style="width:20%;">
+            <button class="update" id="example" disabled>EDIT</button>
+            <button class="delete" id="example" disabled>X</button>
+        </div>
+    </li>
     <% for(var i = 0; i < quotes.length; i++) {%>
     <li class="quote-item">
-        <span class="quote-name"><%= quotes[i].name %>: </span>
-        <span class="quote-text"><%= quotes[i].quote %></span>
+        <div style="width: 70%;">
+            <p class="quote-name"><%= quotes[i].name %>: </p>
+            <p class="quote-text">"<%= quotes[i].quote %>"</p>
+        </div>
+        <div style="width:20%;">
+            <button class="update" id="<%= quotes[i]._id %>">EDIT</button>
+            <button class="delete" id="<%= quotes[i]._id %>">X</button>
+        </div>
     </li>
+    
+    <form onsubmit="event.preventDefault();" action="/quotes" method="post" class="popup <%= quotes[i]._id %>">
+        <h4>Replace this Quote with a better one:</h4>
+        <hr>
+        <!-- <input type="hidden" name="_id" value="<%= quotes[i]._id %>"></input> -->
+        <input type="text" name="name" value="<%= quotes[i].name %>"></input>
+        <input type="text" name="quote" value="<%= quotes[i].quote %>"></input>
+        
+        <button type="submit" class="save" id="<%= quotes[i]._id %>">SAVE</button>
+        <button class="close">CANCEL</button>
+    </form>
     <% } %>
     </ul>
 </div>
+
+
+
+<script type="text/javascript" src="/main.js"></script>
 </body>
 </html>
